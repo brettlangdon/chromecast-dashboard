@@ -1,50 +1,53 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Chromecast dashboard</title>
 
-    <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Cabin+Condensed:700">
+    <link rel="stylesheet" href="//bootswatch.com/flatly/bootstrap.min.css">
     <link rel="icon" type="image/png" href="favicon.png">
-    <script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
   </head>
-  <body>
-    <p>
-      Enter a Url for to display on dashboard and if the page does not update
-      itself then enter an appropriate refresh interval in seconds.
-    </p>
-    <form method="get" action="JavaScript:connect();">
-      <label>Url <input type="text" id="url" placeholder="http://www.gabenewell.org/"></label>
-      <button type="submit">Launch</button>
-    </form>
-    <!-- For some reason the 'number' field stops form action from firing -->
-    <label>Refresh <input type="number" id="refresh" min="0" value="0"></label>
-    <button id="kill" disabled>Stop casting</button>
-    <p id="post-note" style="display: none">
-      If the page does not load please be sure HTTP header X-Frame-Options
-      allows the page to be loaded inside a frame not on the same origin.
-    </p>
+  <body style="background-color:#ecf0f1">
+    <div class="row bs-component">
+      <h1 class="col-xs-8 col-xs-offset-2" style="text-align:center">Chromecast Dashboard</h1>
+    </div>
+    <div class="row well bs-component">
+      <form class="form-horizontal">
+        <div class="alert alert-warning col-xs-6 col-xs-offset-3 hidden"></div>
+        <div class="clearfix"></div>
+        <div class="form-group row">
+          <label for="urls" class="col-xs-3 control-label">Urls</Label>
+          <div class="col-xs-8 col-sm-6">
+            <textarea name="urls" placeholder="Urls, one per line" class="form-control"></textarea>
+            <span class="help-block">A list of urls to switch between, using a newline to separate each url.</span>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="delay" class="col-xs-3 control-label">Delay</label>
+          <div class="col-xs-8 col-sm-6">
+            <input type="number" min="10" placeholder="30" value="30" class="form-control"/>
+            <span class="help-block">Number of seconds to show each page for.</span>
+          </div>
+        </div>
+        <div class="form-group row">
+          <button type="submit" class="btn btn-primary col-xs-offset-3" disabled>Cast</button>
+          <button type="reset" class="btn btn-default" disabled>Stop Casting</button>
+        </div>
+      </form>
+    </div>
   </body>
 
-  <!-- Post load all the goods used to interact with Chromecast/receiver. -->
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-  <script src="http://underscorejs.org/underscore-min.js"></script>
-  <script src="main.js"></script>
 
-  <!-- Start of StatCounter Code for Default Guide -->
-  <script type="text/javascript">
-  var sc_project=9400224;
-  var sc_invisible=1;
-  var sc_security="c2ba274b";
-  var scJsHost = (("https:" == document.location.protocol) ?
-  "https://secure." : "http://www.");
-  document.write("<sc"+"ript type='text/javascript' src='" +
-  scJsHost+
-  "statcounter.com/counter/counter.js'></"+"script>");
-  </script>
-  <noscript><div class="statcounter"><a title="free hit
-  counter" href="http://statcounter.com/free-hit-counter/"
-  target="_blank"><img class="statcounter"
-  src="http://c.statcounter.com/9400224/0/c2ba274b/1/"
-  alt="free hit counter"></a></div></noscript>
-  <!-- End of StatCounter Code for Default Guide -->
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+      <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  <script type="text/javascript" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+  <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="//www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
+  <script type="text/javascript" src="main.js"></script>
 </html>

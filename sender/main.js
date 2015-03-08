@@ -6,86 +6,97 @@ var applicationID = 'F7FD2183';
 var namespace = 'urn:x-cast:com.boombatower.chromecast-dashboard';
 var session = null;
 
-if (!chrome.cast || !chrome.cast.isAvailable) {
-  setTimeout(initializeCastApi, 1000);
-}
+initializeCastApi();
 
 function initializeCastApi() {
-  var sessionRequest = new chrome.cast.SessionRequest(applicationID);
-  var apiConfig = new chrome.cast.ApiConfig(sessionRequest,
-    sessionListener,
-    receiverListener);
+    if(!chrome.cast || !chrome.cast.isAvailable) {
+        setTimeout(initializeCastApi, 1000);
+        return;
+    }
+    var sessionRequest = new chrome.cast.SessionRequest(applicationID);
+    var apiConfig = new chrome.cast.ApiConfig(
+        sessionRequest, sessionListener, receiverListener
+    );
 
-  chrome.cast.initialize(apiConfig, onInitSuccess, onError);
+    chrome.cast.initialize(apiConfig, onInitSuccess, onError);
+    $('button[type=submit]').prop('disabled',false);
 };
 
 function onInitSuccess() {
-  console.log('onInitSuccess');
+    console.log('onInitSuccess');
 }
 
 function onError(message) {
-  console.log('onError: ' + JSON.stringify(message));
+    console.log('onError: ' + JSON.stringify(message));
 }
 
 function onSuccess(message) {
-  console.log('onSuccess: ' + JSON.stringify(message));
+    console.log('onSuccess: ' + JSON.stringify(message));
 
-  if (message['type'] == 'load') {
-    $('#kill').prop('disabled', false);
-    $('#post-note').show();
-  }
+    if(message['type'] == 'load') {
+        $('button[type=reset]').prop('disabled', false);
+    }
 }
 
 function onStopAppSuccess() {
-  console.log('onStopAppSuccess');
+    console.log('onStopAppSuccess');
 
-  $('#kill').prop('disabled', true);
-  $('#post-note').hide();
+    $('button[type=reset]').prop('disabled', true);
 }
 
 function sessionListener(e) {
-  console.log('New session ID: ' + e.sessionId);
-  session = e;
-  session.addUpdateListener(sessionUpdateListener);
+    console.log('New session ID: ' + e.sessionId);
+    session = e;
+    session.addUpdateListener(sessionUpdateListener);
 }
 
 function sessionUpdateListener(isAlive) {
-  console.log((isAlive ? 'Session Updated' : 'Session Removed') + ': ' + session.sessionId);
-  if (!isAlive) {
-    session = null;
-  }
+    console.log((isAlive ? 'Session Updated' : 'Session Removed') + ': ' + session.sessionId);
+    if(!isAlive) {
+        session = null;
+    }
 };
 
 function receiverListener(e) {
-  if (e !== 'available') {
-    alert('No Chromecast receivers available');
-  }
+    if(e !== 'available') {
+        alert('No Chromecast receivers available');
+    }
 }
 
 function sendMessage(message) {
-  if (session != null) {
-    session.sendMessage(namespace, message, onSuccess.bind(this, message), onError);
-  }
-  else {
-    chrome.cast.requestSession(function(e) {
-      session = e;
-      sessionListener(e);
-      session.sendMessage(namespace, message, onSuccess.bind(this, message), onError);
-    }, onError);
-  }
+    if(session !== null) {
+        session.sendMessage(namespace, message, onSuccess.bind(this, message), onError);
+    } else {
+        chrome.cast.requestSession(function(e) {
+            session = e;
+            sessionListener(e);
+            session.sendMessage(namespace, message, onSuccess.bind(this, message), onError);
+        }, onError);
+    }
 }
 
 function stopApp() {
-  session.stop(onStopAppSuccess, onError);
+    if(session){
+        session.stop(onStopAppSuccess, onError);
+    }
 }
 
 function connect() {
-  console.log('connect()');
-  sendMessage({
-    type: 'load',
-    url: $('#url').val(),
-    refresh: $('#refresh').val(),
-  });
+    var urls = $('textarea[name=urls]').val().split("\n");
+
+    console.log('connect()');
+    sendMessage({
+        type: 'load',
+        urls: urls,
+        delay: $('input[name=delay]').val(),
+    });
 }
 
-$('#kill').on('click', stopApp);
+
+$(document).on('submit', 'form', function(evt){
+    evt.preventDefault();
+    return false;
+});
+
+$(document).on('click', 'button[type=reset]', stopApp);
+$(document).on('click', 'button[type=submit]', connect);
