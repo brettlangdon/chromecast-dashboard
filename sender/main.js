@@ -19,7 +19,6 @@ function initializeCastApi() {
     );
 
     chrome.cast.initialize(apiConfig, onInitSuccess, onError);
-    $('button[type=submit]').prop('disabled',false);
 };
 
 function onInitSuccess() {
@@ -60,6 +59,9 @@ function sessionUpdateListener(isAlive) {
 function receiverListener(e) {
     if(e !== 'available') {
         alert('No Chromecast receivers available');
+        setTimeout(initializeCastApi, 1000);
+    } else {
+        $('button[type=submit]').prop('disabled',false);
     }
 }
 
