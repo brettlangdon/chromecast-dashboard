@@ -2,7 +2,7 @@
  * Main JavaScript for handling Chromecast interactions.
  */
 
-var applicationID = 'CFA9B4B6';
+var applicationID = 'F6C8F0A1';
 var namespace = 'urn:x-cast:is.brett.chromecast-dashboard';
 var session = null;
 
