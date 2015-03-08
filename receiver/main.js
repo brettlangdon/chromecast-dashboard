@@ -7,6 +7,18 @@ var index = 0;
 var delay = 30 * 1000;
 var interval = null;
 
+var changeUrl = function(){
+    if(!urls.length){
+        return;
+    }
+    if(index > urls.length){
+        index = 0;
+    }
+
+    $('#dashboard').attr('src', urls[index]);
+    index += 1;
+};
+
 
 window.onload = function() {
     cast.receiver.logger.setLevelValue(0);
@@ -37,17 +49,8 @@ window.onload = function() {
             urls = event.data.urls;
             delay = event.data.delay * 1000;
             clearInterval(interval);
-            interval = setInterval(function(){
-                if(!urls.length){
-                    return;
-                }
-                index += 1;
-                if(index > urls.length){
-                    index = 0;
-                }
-
-                $('#dashboard').attr('src', urls[index]);
-            }, delay);
+            interval = setInterval(changeUrl, delay);
+            changeUrl();
         }
     }
 
