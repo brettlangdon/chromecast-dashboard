@@ -2,8 +2,8 @@
  * Main JavaScript for handling Chromecast interactions.
  */
 
-var applicationID = 'F7FD2183';
-var namespace = 'urn:x-cast:com.boombatower.chromecast-dashboard';
+var applicationID = 'CFA9B4B6';
+var namespace = 'urn:x-cast:is.brett.chromecast-dashboard';
 var session = null;
 
 initializeCastApi();
