@@ -4,7 +4,7 @@
 
 var urls = [];
 var index = 0;
-var delay = 30;
+var delay = 30 * 1000;
 var interval = null;
 
 
@@ -35,7 +35,7 @@ window.onload = function() {
 
         if (event.data.type === 'load') {
             urls = event.data.urls;
-            delay = event.data.delay;
+            delay = event.data.delay * 1000;
             clearInterval(interval);
             interval = setInterval(function(){
                 if(!urls.length){
